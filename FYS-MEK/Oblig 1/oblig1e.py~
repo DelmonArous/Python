@@ -1,0 +1,21 @@
+from scitools.std import *
+
+dt = 0.01;g = 9.81; v_star = 0.5 
+my = 0.1; my_s = 0.2; my_d = 0.1
+T = 6.; v0 = 5. 
+n = int(round(T/dt))
+t = zeros(n); v = zeros(n)
+v[0] = v0
+
+def a(v):
+    return -my_d*g - g*((my_s-my_d)/(1 + v/v_star)) 
+
+for i in range(n-1):
+    v[i+1] = v[i] + dt*a(v[i])
+    t[i+1] = t[i] + dt
+
+v_exact = -my*g*t + v0
+
+plot(t, v, t, v_exact, legend=('v(t) numerical', 'v(t) exact'), 
+     title='Plot of v(t) and comparison with the analytical solution', 
+     xlabel='t[s]', ylabel='v[m/s]')

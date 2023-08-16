@@ -1,0 +1,19 @@
+from scitools.std import *
+
+dt = 0.01 # (t_i - t_i-1)s
+my = 0.1
+g = 9.81 # m/s**2
+T = 10 # s
+n = float(round(T/dt))
+t = zeros(n); v = zeros(n);  a = zeros(n)
+a = a + -my*g
+print a
+'''
+for i in range(n):
+    a[i] = 
+    v[i+1] = v[i] + dt*a[i]
+   
+''' 
+    
+
+
