@@ -1,0 +1,11 @@
+Fdegrees = range(0,101,10)
+
+C = [(F - 30)/2.0 for F in Fdegrees]
+C_exact = [(5.0/9)*(F - 32) for F in Fdegrees]
+
+table = [Fdegrees, C_exact, C]
+
+print '    F       C       Approx. of C'
+
+for F,C1,C in table:
+    print '%d %7.1f %7d' % (F,C1,C)

@@ -1,0 +1,13 @@
+def s(M):
+    k = 1
+    term = 1.0/k
+    s = term
+    
+    while k <= M:
+        k += 1
+        term = 1.0/k
+        s += term
+    
+    print 'The sum s equals %.4f' % s
+
+s(M=100)

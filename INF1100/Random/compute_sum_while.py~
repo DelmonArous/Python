@@ -1,0 +1,28 @@
+k = 0       # Put k = 0 to start from k = 1 in the while-loop
+M = 100
+s = 0
+
+while k <=M:
+    k += 1          # Have to add 1 to every k so the loop can end 
+    term = 1.0/k    # Made a local variable (type float) term to compute each term of s
+    s += term       # Implemented the variable term into the sum s
+print 'The sum s equals %.3f' % s
+
+#Alternative method
+
+k = 1
+M = 3
+term = 1.0/k
+s = term
+
+while k <= M:
+    k += 1
+    term = 1.0/k
+    s += term
+print 'The sum s equals %.3f' % s
+
+'''
+Unix> python compute_sum_while.py
+The sum s equals 5.187
+The sum s equals 5.187
+'''
