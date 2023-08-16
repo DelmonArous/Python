@@ -1,0 +1,10 @@
+primes = [1, 3, 5, 7, 9, 11, 13]
+newList = []
+p = 17
+
+for i in range(len(primes)):
+    list = primes[i]
+    newList.append(list)
+
+newList.append(p)
+print newList

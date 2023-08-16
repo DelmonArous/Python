@@ -1,0 +1,30 @@
+import random,sys
+
+def equal():
+    
+    try:
+        expr1 = sys.argv[1]
+        expr2 = sys.argv[2]
+        A = float(sys.argv[3])
+        B = float(sys.argv[4])
+    except IndexError:
+        print 'You failed to provide command-line argument(s)!'
+        sys.exit(1)
+    except ValueError:
+        print 'The command-line argument(s) do not fit the function!'
+        sys.exit(1)
+        
+    n = 500    
+    x = 0
+    count = 0
+    
+    while x < n:
+        a = random.uniform(A,B)
+        b = random.uniform(A,B)
+        x += 1
+        if not eval(expr1) == eval(expr2):
+            count += 1
+    
+    print 'Number of failures: %g \nPercentage of failures: %g %%' % (count, count/float(n)*100)
+    
+equal()

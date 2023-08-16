@@ -1,0 +1,19 @@
+from math import *
+
+def C(x=2*pi,n=10):
+    x = float(x)
+    j = 1
+    list = range(1,n+1)
+    term0 = 1
+    term = -term0*(x**2)/(2*j*(2*j-1))
+    s = term
+    for j in list:
+        term = -term*(x**2)/(2*j*(2*j-1))
+        s += term
+    error = cos(x) - s
+    print error
+    print ' x           sum            n'
+    print 'x=%.2f %10d %10d' % (x,s,n)
+
+print C()
+                             

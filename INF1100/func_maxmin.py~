@@ -1,0 +1,13 @@
+from math import *
+
+def maxmin(f, a, b):
+    n = 1000
+    dx = (b - a) / n
+    x = []
+    y = []
+    for k in range(n):
+        xi = a + k*dx
+        x.append(xi)
+    for i in x:
+        y.append(f(i))
+    return max(y),min(y)

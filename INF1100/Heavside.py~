@@ -1,0 +1,12 @@
+def H(x):
+    
+    if x < 0:
+        H = 0
+        print H
+    elif x >= 0:
+        H = 1
+        print H
+
+H(-0.5)
+H(0)
+H(10)
