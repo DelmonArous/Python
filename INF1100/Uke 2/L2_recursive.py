@@ -1,0 +1,13 @@
+def L2(x=10,n=10):
+
+    x = float(x)
+    term = (x / (1.0 + x))
+    s = term
+    for i in range(2,n+1):
+        a = ((i-1.0)/i)*(x/(1.0+x))
+        term = a*term
+        s += term
+    
+    return s
+
+print L2()

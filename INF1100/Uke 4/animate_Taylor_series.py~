@@ -1,0 +1,34 @@
+from scitools.std import *
+import glob, os
+import time
+
+def animate_series(fk, M, N, xmin, xmax, ymin, ymax, n, exact):
+    
+    x = linspace(xmin,xmax,n)
+    s = 0
+    y_exact = exact(x)
+    for k in range(M,N +1):
+        s += fk(k,x)
+        plot(x,s,x,y_exact,legend=('k=%d' % k, 'exact'),
+             axis=[xmin,xmax,ymin,ymax], hardcopy=('tmp_%04d.png' % k))
+        time.sleep(0.5)
+    hold('on')
+    for f in glob.glob('tmp_*.png'):
+        os.remove(f)
+
+def fk_sin(k,x):
+    return (-1)**k*x**(2*k+1)/float(factorial(2*k+1))
+
+def fk_exp(k,x):
+    return (-x)**k/float(factorial(2*k+1))
+
+animate_series(fk_sin,M=0,N=40,xmin=0,xmax=13*pi,ymin=-2,ymax=2,
+               n=500,exact=sin)
+movie('tmp_*.png',output_file='tmpmovie1.gif')
+
+def exp_neg(x):
+    return exp(-x)
+
+animate_series(fk_exp,M=0,N=30,xmin=0,xmax=15,ymin=-0.5,ymax=1.4,
+               n=500,exact=exp)
+movie('tmp_*.png',output_file='tmpmovie2.gif')

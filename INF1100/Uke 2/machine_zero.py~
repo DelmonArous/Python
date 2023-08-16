@@ -1,0 +1,5 @@
+eps = 1.0                # Setter en verdi for eps
+while 1.0 != 1.0 - eps:  # Lar løkken kjøre så lenge 1.0 er ulik (1.0 - eps)
+    print eps            # Skriver ut en ny verdi for eps for hver gang løkken kjøres
+    eps = eps/2.0        # Lar eps få en ny verdi ved eps/2.0
+print 'Final eps:', eps  # Når løkken har kjørt ferdig (eps tilarmet 0), vil den siste verdien i løkken av eps skrives ut

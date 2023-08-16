@@ -1,0 +1,16 @@
+import scitools.std import *
+from scitools.StringFunction import StringFunction
+
+formula = sys.argv[1]
+interval = eval(sys.argv[2])
+n = 500
+
+f = StringFunction(formula)
+f.vectorize(globals())
+
+x = linspace(interval[0],interval[1],n)
+y = f(x)
+
+plot(x,y)
+
+

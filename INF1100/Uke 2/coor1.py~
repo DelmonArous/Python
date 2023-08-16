@@ -1,0 +1,8 @@
+list = []
+h = 0.01
+
+for i in range(0,101,1):
+    xi = 1 + i*h
+    list.append(xi)
+
+print list

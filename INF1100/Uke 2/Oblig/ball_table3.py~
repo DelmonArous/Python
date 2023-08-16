@@ -1,0 +1,37 @@
+v0 = 5; t2 = []; g = 9.81; dt = 0.1
+
+print ' t          y(t)'
+
+t_list = [0.1 + i*dt for i in range(0,6,1)]
+y = [v0*t - (1./2)*g*t**2 for t in t_list]
+
+t1 = [t_list,y]                            # implementing the two lists t and y into the empty list t1
+
+for i in range(len(t_list)):
+    print '%.2f s %7.3f m' % (t1[0][i],t1[1][i]) # the values of t1[0][i] is the list t and the values of t1[1][i] is the list y
+
+print '----------------'
+
+for T,Y in zip(t_list,y):
+    t2.append([T,Y])    # adding each row in the table of t and y into the empty list t2
+
+for T,Y in t2:
+    print '%.2f s %7.3f m' % (T,Y) # printing out the two elements T and Y in each row of t2
+
+'''
+Unix> python ball_table3.py
+ t          y
+0.10 s   0.451 m
+0.20 s   0.804 m
+0.30 s   1.059 m
+0.40 s   1.215 m
+0.50 s   1.274 m
+0.60 s   1.234 m
+----------------
+0.10 s   0.451 m
+0.20 s   0.804 m
+0.30 s   1.059 m
+0.40 s   1.215 m
+0.50 s   1.274 m
+0.60 s   1.234 m
+'''

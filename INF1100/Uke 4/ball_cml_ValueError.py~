@@ -1,0 +1,18 @@
+import sys
+
+g = 9.81
+
+try:
+    t = eval(sys.argv[1])
+    v0 = eval(sys.argv[2])
+
+except:
+    sys.exit(1)
+
+if not 0 < t < ((2*v0)/g):
+    raise ValueError('The value t=%g is out of range' % t)
+    sys.exit(1)
+
+y = v0*t - 0.5*g*t**2
+
+print 'y(%g)=%.2f m with v0=%g m/s' % (t,y,v0)

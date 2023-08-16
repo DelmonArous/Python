@@ -1,0 +1,20 @@
+import sys
+
+try:
+    t = eval(sys.argv[1])
+except IndexError:
+    print 'You failed to provide the command-line argument t'
+    t = float(raw_input('t=? '))
+try:
+    v0 = eval(sys.argv[2])
+except IndexError:
+    print 'You failed to provide the command-line argument v0'
+    v0 = float(raw_input('v0? '))
+except ValueError:
+    print 'The command-line argument(s) must be pure number(s)'
+    sys.exit(1)
+
+g = 9.81
+y = v0*t - 0.5*g*t**2
+
+print 'y(%g)=%.2f m with v0=%g m/s' % (t,y,v0)

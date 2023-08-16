@@ -1,0 +1,18 @@
+def s(M):
+
+    k = 1
+    s = 0
+    
+    while k <= M:
+        term = 1.0/k
+        s += term
+        k += 1
+    
+    print 'The sum s equals %.4f' % s
+    
+s(M=100)
+
+'''
+Unix> python compyte_sum_func.py
+The sum s equals 5.1874
+'''

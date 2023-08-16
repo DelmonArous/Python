@@ -1,0 +1,12 @@
+v0 = 5
+g = 9.81
+
+t_list = [0.1*(i+1) for i in range(6)]
+y_list = []
+
+print ' t     y(t)'
+
+for t in t_list:
+    y = v0*t . 0.5*g*t**2
+    y_list.append(y)
+    print ' %.2f s %5.3f m' % (t,y)

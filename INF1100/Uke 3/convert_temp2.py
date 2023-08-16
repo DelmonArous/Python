@@ -1,0 +1,25 @@
+import sys
+from convert_temp import *
+
+try:
+    temp = float(sys.argv[1])
+    temp_scale = sys.argv[2]
+except IndexError:
+    print 'Both the numerical value and scale must be supplied on the command line!'
+    sys.exit(1)
+except ValueError:
+    print 'The numerical value must be supplied first, scale second'
+    sys.exit(1)
+
+if __name__ == '__main__':
+    if temp_scale == 'C':
+        C = temp
+        print '%g F %g K' % (C2F(C),C2K(C))
+    elif temp_scale == 'F':
+        F = temp
+        print '%g C %g K' % (F2C(F),F2K(F))
+    elif temp_scale == 'K':
+        K = temp
+        print '%g C %g F' % (K2C(K),K2F(K))
+    else:
+        print 'You wrote a wrong temperature scale; %s (only C, F, K valid)' % temp_scale
