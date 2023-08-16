@@ -1,0 +1,81 @@
+from scitools.std import *
+
+class spectrum:
+    def __init__(self, filename):
+        self.filename = filename
+        self.wavelength, self.flux = [], []
+
+        self.read_data()
+        self.plot_sectrum()
+        self.star_velocity()
+        self.model()
+
+    def read_data(self):
+        self.infile = open(self.filename, 'r')
+        for line in self.infile:
+            numbers = line.split()
+            self.wavelength.append(float(numbers[0]))
+            self.flux.append(float(numbers[1]))
+
+        self.infile.close()
+
+        self.wavelength = array(self.wavelength)
+        self.flux = array(self.flux)
+
+        return self.wavelength, self.flux
+
+    def plot_spectrum(self):
+        
+        plot(self.wavelength, self.flux
+             xlabel='Flux', ylabel='Observed wavelength [nm]'
+             title='Plot of observed wavelength vs flux')
+
+    def star_velocity(self, c=299792458, lambda0=656.3):
+        self.c, self.lambda0 = c, lambda0
+        lambda_min = float(raw_input('Minimum wavelength of the flux: '))
+        
+        self.vel_rad = c*(self.wavelength-lambda0)/lambda0
+        
+        return self.vel_rad
+    
+    def model(self):
+        
+        F_min = float(raw_input('Type in the minimum value of the flux: '))
+        F_max = float(raw_input('Type in the maximum value of the flux: '))
+        sigma_min =\
+            float(raw_input('Type in the minimum value of the width: ')) 
+        sigma_max =\
+            float(raw_input('Type in the maximum value of the width: '))
+        lambda_center_min =\
+            float(raw_input('Type in the minimum value of the central wavelength: '))
+        lambda_center_max =\
+            float(raw_input('Type in the maximum value of the central wavelength: '))
+
+        Fmin = linspace(F_min,F_max,n)
+        sigma = linspace(sigma_min,sigma_max,n)
+        lambda_center = linspace(lambda_center_min, lambda_center_max, n)
+        
+        Fmin_best = F_min
+        sigma_best = sigma_min
+        lambda_center_best = lambda_center_min
+        delta_best = sum(self.flux**2)
+
+        for i in range(len(Fmin)):
+            for j in range(len(sigma)):
+                for k in range(len(lambda_center)):
+                    F_model = 1 + (Fmin[i] - 1)*\
+                        exp(-((self.wavelength-lambda_center[k])**2)/2*sigma[j]**2)
+                    delta = sum((self.flux - F_model)**2)
+
+                    if delta < delta_best:
+                        delta_best = delta
+                        Fmin_best = Fmin[i]
+                        sigma_best = sigma[j]
+                        lambda_center_best = lambda_center[k]
+
+        
+
+
+        
+
+

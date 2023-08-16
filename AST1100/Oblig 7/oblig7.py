@@ -1,0 +1,88 @@
+from scitools.std import *
+
+# Constants
+c = 3*10**8        # lightspeed  [m/s]
+G = 6.673*10**-11  # gravitational constant [Nm**2/kg**2]
+
+# Function that reads data from file
+def read_file():
+    ang_x, ang_y, dist, lambda_obs = [],[],[],[]
+    infile = open('galaxies.txt','r') # read file
+    for line in infile:
+        numbers = line.split()
+        ang_x.append(float(numbers[0])) # appending data into lists
+        ang_y.append(float(numbers[1]))
+        dist.append(float(numbers[2]))
+        lambda_obs.append(float(numbers[3]))
+    
+    infile.close() # close file filename
+
+    # Convert lists into arrays and returning them
+    # for further use in other functions
+    ang_x = array(ang_x)
+    ang_y = array(ang_y)
+    dist = array(dist)*(10**6*3.27*9.47*10**15)
+    lambda_obs = array(lambda_obs)
+
+    return ang_x, ang_y, dist, lambda_obs
+
+# Function that calculates the radial velocity of each galaxy
+# relative to CM of the cluster
+def rad_vel_galaxy():
+    lambda_0 = 21.2/100
+    v_gal = c*(lambda_obs-lambda_0)/lambda_0 # Doppler's formula
+    v_cluster = sum(v_gal)/len(v_gal)        # velocity to CM of the cluster 
+                                             # relative to us (peculiar velocity)
+    v_rel = v_gal - v_cluster                # radial velocity relative to CM
+                                             # of the cluster
+
+    print 'The velocity to CM of the cluster: %.3f*10**6 m/s' % (v_cluster/10**6)
+
+    return v_gal, v_cluster, v_rel
+
+# Function that plots the cluster
+def plot_cluster():
+    plot(ang_x, ang_y, 'o',
+         xlabel='arcminutes', ylabel='arcminutes',
+         title='Plot of galaxycluster')
+    raw_input('Press "Enter": ')
+
+# Function that calculates the mass of a galaxy in the cluster
+def mass_galaxy():
+    dist_galaxy = dist
+    rad_x = ang_x*(1./60)*(2*pi/360) # convert to radian
+    rad_y = ang_y*(1./60)*(2*pi/360) # convert to radian
+    x = dist_galaxy*rad_x            # small-angle formula
+    y = dist_galaxy*rad_y            # small-angle formula
+    z = dist_galaxy
+    
+    r_tot = 0
+    v = sum(v_rel**2)
+
+    for i in range(len(dist_galaxy)):
+        r_temp = 0
+        for j in range(len(dist_galaxy)):
+            if j > i:
+                r_ij = sqrt((x[j]-x[i])**2 + (y[j]-y[i])**2 + (z[j]-z[i])**2)
+                r_temp = r_temp + (1./r_ij) 
+
+        r_tot = r_tot + r_temp
+    
+    m = v/(G*(r_tot))
+    
+    print 'Mass of each galaxy in the cluster: %e kg' % m
+    return m
+
+
+# Call functions
+ang_x, ang_y, dist, lambda_obs = read_file()
+v_gal, v_cluster, v_rel = rad_vel_galaxy()
+plot_cluster()
+mass_galaxy() 
+
+'''
+Unix> python oblig7.py
+The velocity to CM of the cluster: 1.237*10**6 m/s
+Press "Enter": 
+Mass of each galaxy in the cluster: 8.734158e+41 kg
+'''

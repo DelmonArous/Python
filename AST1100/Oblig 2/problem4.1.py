@@ -1,0 +1,172 @@
+from scitools.std import *
+
+# Creating class 'star'
+class star:
+    # Constructor
+    def __init__(self,filename):
+        # Declaring self-variables and lists
+        self.filename = filename
+        self.time, self.flux, self.wavelength = [], [], []
+
+        # Call on functions created below
+        self.read_datafile()
+        self.radial_velocity()
+        self.peculiar_velocity()
+        self.light_curve()
+        self.relative_velocity()
+        self.model()
+
+    # Function reads data from file self.filename
+    def read_datafile(self):
+        self.infile = open(self.filename,'r')
+        for line in self.infile:
+            numbers = line.split()
+            self.time.append(float(numbers[0]))  # appending data into
+            self.flux.append(float(numbers[-1])) # self-lists
+            self.wavelength.append(float(numbers[1]))
+
+        self.infile.close() # close file self.filename
+        
+        # Convert self-lists into self-arrays and returning them
+        # for further use in other functions
+        self.time = array(self.time)
+        self.flux = array(self.flux)
+        self.wavelength = array(self.wavelength)
+	
+	return self.time,self.flux,self.wavelength
+
+    # Function calculates radial velocity using Doppler's formula
+    def radial_velocity(self,c=299792458,lambda_obs=656.3*10**-9):
+        self.rad_vel = c*((self.wavelength*10**-9)-lambda_obs)/lambda_obs
+
+	return self.rad_vel
+
+    # Function calculates peculiar velocity (velocity of CM)
+    def peculiar_velocity(self):
+        self.pec_vel = sum(self.rad_vel)/len(self.rad_vel)
+        print 'The peculiar velocity of %s: %.3f m/s' \
+            % (self.filename, self.pec_vel) # printing pec. vel. of star
+	return self.pec_vel
+    
+    # Function plots light-curve: flux vs time 
+    def light_curve(self):
+        plot(self.time,self.flux,
+             xlabel='Time [s]',ylabel='Flux',
+             title='Plot of flux vs time: %s' % self.filename)
+        figure()
+
+    # Function calculates relative velocity of star, relative to CM
+    def relative_velocity(self):
+        self.rel_vel = self.rad_vel - self.pec_vel        
+        return self.rel_vel
+
+    # Function finds best values of the radial velocity vr, period P and
+    # time t0 using the least-square method
+    def model(self, G=6.673*10**-11):
+        
+        m_sun = 1.9891*10**30 # solar mass [kg]
+        self.G = G            # the gravitational constant
+
+        # Reads in minimum/maximum values from the terminal-screen
+        t0_min = float(raw_input('Type in the minimum value of t0: '))
+        t0_max = float(raw_input('Type in the maximum value of t0: '))
+        vr_min = float(raw_input('Type in the minimum value of vr: '))
+        vr_max = float(raw_input('Type in the maximum value of vr: '))
+        P_min = float(raw_input('Type in the minimum value of P: '))
+        P_max = float(raw_input('Type in the maximum value of P: '))
+        # factor of solar mass to star
+        m_star =\
+            float(raw_input('Type in the "solar mass"-factor of the star: '))
+
+        # Declaring arrays with 20 values each
+        t0 = linspace(t0_min,t0_max, 20)
+        vr = linspace(vr_min,vr_max, 20)
+        P =  linspace(P_min,P_max, 20)
+           
+        # Placing the best-values to minimum
+        t0_best = t0_min
+        vr_best = vr_min
+        P_best = P_min
+        delta_best = sum((self.rad_vel)**2) # the best value for delta to start
+        # out with is when the theoretical model of the radial velocity is equal
+        # to zero
+
+        # Calculating new values for relative velocity and delta 
+        # using our theoretical model. This is done by looping through every
+        # possible value of t0, vr and P. 
+        for i in range(len(t0)):
+            for j in range(len(vr)):
+                for k in range(len(P)):
+                    rel_vel_model = vr[j]*cos((2*pi/P[k])*(self.time-t0[i]))
+                    delta = sum((self.rel_vel-rel_vel_model)**2)
+                    
+                    # If our delta, the deviation between 
+                    # our data and model, is less than delta_best,
+                    # override previous parameters
+                    if delta < delta_best:
+                        delta_best = delta
+                        t0_best = t0[i]
+                        vr_best = vr[j]
+                        P_best = P[k]
+                    
+        rel_vel_model_best = vr_best*cos((2*pi/P_best)*(self.time-t0_best))
+        
+        # Estimating minimum mass of the planet orbiting given star
+        m_p = (((m_sun*m_star)**2)*P_best/(2*pi*G))**(1/3.)*vr_best
+        print 'The mass of the planet orbiting %s: %.2e kg'\
+            % (self.filename, m_p)
+        
+        plot(self.time, self.rel_vel,legend='Data')
+        hold('on')
+        plot(self.time, rel_vel_model_best,
+             xlabel='Time [s]',ylabel='Relative velocity [m/s]',
+             legend='Model',
+             title='Plot of relative velocity vs time: %s' % self.filename)
+        hold('off')
+
+        raw_input('')
+
+        return t0_best,vr_best,P_best,m_p
+
+# These stars do have a planet orbiting
+star0 = star('star0.txt')
+figure()
+star3 = star('star3.txt')
+figure()
+star4 = star('star4.txt') 
+figure()
+
+'''
+Unix> python problem4.1.py
+The peculiar velocity of star0.txt: 9993.411 m/s
+Type in the minimum value of t0: 250000
+Type in the maximum value of t0: 320000
+Type in the minimum value of vr: 200
+Type in the maximum value of vr: 250
+Type in the minimum value of P: 270000
+Type in the maximum value of P: 420000
+Type in the mass of the star: 0.8
+The mass of the planet orbiting star0.txt: 2.83e+27 kg
+-------------------------------------------------------
+The peculiar velocity of star3.txt: 799446.519 m/s
+Type in the minimum value of t0: 120000
+Type in the maximum value of t0: 150000
+Type in the minimum value of vr: 700
+Type in the maximum value of vr: 800
+Type in the minimum value of P: 140000
+Type in the maximum value of P: 200000
+Type in the mass of the star: 0.5
+The mass of the planet orbiting star3.txt: 5.68e+27 kg
+---------------------------------------------------------
+The peculiar velocity of star4.txt: 99930.945 m/s
+Type in the minimum value of t0: 400000
+Type in the maximum value of t0: 600000
+Type in the minimum value of vr: 300
+Type in the maximum value of vr: 375
+Type in the minimum value of P: 850000
+Type in the maximum value of P: 1250000
+Type in the mass of the star: 1.8
+The mass of the planet orbiting star4.txt: 1.04e+28 kg
+--------------------------------------------------------
+Jeg har samarbeidet med Saurav Sharma med denne programkoden.
+'''
