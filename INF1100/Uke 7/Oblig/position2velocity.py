@@ -1,0 +1,33 @@
+from scitools.std import *
+
+infile = open('pos.dat', 'r')
+
+s = float(infile.readline())
+x = []; y = []
+
+for line in infile:
+    words = line.split()     # split the two columns into a list named words
+    x.append(float(words[0]))
+    y.append(float(words[1]))
+    
+infile.close()
+
+figure()
+plot(x, y, axis=[min(x),max(x),min(y),max(y)], xlabel='x',ylabel='y',
+     title='Plot of position from GPS coordinates')
+
+x = array(x); y = array(y)
+vx = zeros(len(x)-1)  # the velocity is computed between two points, 
+vy = zeros(len(y)-1)  # therefore the last point is not included
+
+t = [k*s for k in range(len(x))]  # k = 0,...,n-1
+                                  # where n equals len(x) or len(y) 
+
+for k in range(len(x)-1):   # k = 0,...,n-2
+    vx[k] = (x[k+1]-x[k])/s
+    vy[k] = (y[k+1]-y[k])/s
+
+figure()
+plot(t[:-1], vx, t[:-1], vy, 
+     legend=('x-velocity','y-velocity'), xlabel='time', ylabel='velocity', 
+     title='Plot of velocity from GPS coordinates')

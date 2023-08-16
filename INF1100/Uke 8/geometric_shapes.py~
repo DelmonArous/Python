@@ -1,0 +1,14 @@
+class Geometric:
+    def __init__(self, x0, y0, x1, y1, x2, y2, W, H):
+        self.x0, self.y0 = x0, y0
+        self.x1, self.y1 = x1, y1
+        self.x2, self.y2 = x2, y2
+        self.W, self.H = W, H
+
+    def area(self):
+        return self.W*self.H, 0.5*((self.x2*self.y3)-(self.x3*self.y2)-(self.x1*self.y3)+ \
+                                   (self.x3*self.y1)+(self.x1*self.y2)-(self.x2*self.y1))
+
+
+    def circumference(self):
+        return 2*self.W+2*self.H

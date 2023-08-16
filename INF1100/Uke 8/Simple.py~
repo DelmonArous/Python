@@ -1,0 +1,9 @@
+class Simple:
+    def __init__(i):
+        self.i = i
+    
+    def double(self):
+        return self.i + self.i
+
+s1 = Simple(4)
+print s1

@@ -1,0 +1,24 @@
+from scitools.std import *
+
+infile = open('xy.dat', 'r')
+
+x = []
+y = []
+
+for line in infile:
+    words = line.split()
+    x.append(float(words[0]))
+    y.append(float(words[1]))
+    
+infile.close()
+
+x = array(x)
+y = array(y)
+
+y_min = min(y)
+y_max = max(y)
+
+print 'Max y-value: %g , min y-value: %g' % (y_max,y_min)
+
+plot(x,y)
+

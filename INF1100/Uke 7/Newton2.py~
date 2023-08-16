@@ -1,0 +1,33 @@
+from scitools.std import *
+
+def g(x):
+    return (x**6)*sin(pi*x)
+
+def dg(x):
+    return (6*x**5)*sin(pi*x) + (pi*x**6)*cos(pi*x)
+
+def Newton_plot(f, x, dfdx, eps=1E-7):
+    
+    N = 50
+    n = 1
+    index_set = range(N+1)
+    x_values = zeros(len(index_set))
+    f_values = zeros(len(index_set))
+    x_values[0] = x
+    f_values[0] = f(x)
+
+    while abs(f(x)) <= eps and n <= N:
+        
+        x_values[n] = x_values[n-1] - f(x_values[n-1])/dfdx(x_values[n-1])
+        f_values[n] = f(x_values[n])
+        
+        n += 1
+
+    return x_values, f_values
+
+x0_values = [-2.6,-1.2,1.5,1.7,0.6]
+
+for x0 in x0_values:
+    xn, fn = Newton_plot(g ,x0, dg, eps=1E-13)
+    plot(xn,fn)
+    hold('on')

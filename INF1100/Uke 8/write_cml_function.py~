@@ -1,0 +1,28 @@
+from scitools.StringFunction import StringFunction
+import sys
+
+try:
+    a = float(sys.argv[1])
+except IndexError:
+    print 'You have failed to provide the cml argument a'
+    a = float(raw_input('a=? '))
+try:
+    b = float(sys.argv[2])
+except IndexError:
+    print 'You have failed to provide the cml argument b'
+    b = float(raw_input('b=? '))
+try:
+    n = float(sys.argv[3])
+except IndexError:
+    print 'You have failed to provide the cml argument n'
+    n = float(raw_input('n=? '))
+try:
+    f = sys.argv[4]
+except IndexError:
+    print 'You have failed to provide the formula f as an cml arguments!'
+    f = raw_input('f=? ')
+
+formula = StringFunction(f)
+dx = (b-a)/n
+x_values = [a + i*dx for i in range(n+1)]
+y = [formula(x) for x in x_values]

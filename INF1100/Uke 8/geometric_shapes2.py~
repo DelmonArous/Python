@@ -1,0 +1,13 @@
+class Derivative:
+    def __init__(self, h, f):
+        self._h = float(h)
+        self._f = f
+        
+    def get_precision(self):
+        f, h = self._f, self._h
+        return (f(x+h)-f(x))/h
+    
+
+    def set_precision(self, h):
+        self._h = h
+        return (f(x+h)-f(x))/h

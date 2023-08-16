@@ -1,0 +1,19 @@
+class Account:
+    def __init__(self, name, account_number, initial_amount, transactions=0):
+        self.name = name
+        self.no = account_number
+        self.balance = initial_amount
+        self.count = transactions
+    
+    def deposit(self, amount, counter):
+        self.balance += amount
+        self.count += 1
+    
+    def withdraw(self, amount, counter):
+        self.balance -= amount
+        self.count += 1
+   
+    def dump(self):
+        s = '%s, %s, balance: %s' % \
+            (self.name, self.no, self.balance)
+        print s

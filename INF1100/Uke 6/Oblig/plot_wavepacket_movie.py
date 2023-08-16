@@ -1,0 +1,25 @@
+from scitools.std import *
+import glob, os
+
+for f in glob.glob('wave*.png'):
+    os.remove(f) # Removes the family of old plot files
+
+def f(x,t):
+    return exp(-(x-3*t)**2)*sin(3*pi*(x-t))
+
+x_values = linspace(-6,6,1001)
+t_values = linspace(-1,1,11)
+j = 0
+
+for t in t_values:
+    y = f(x_values,t)
+    plot(x_values, y, axis=[x_values[0],x_values[-1],-1,1],
+         xlabel='x', ylabel='f(x)',
+         legend=('Wave packet f(x,t=%g)' % t),
+         title='Animated wave packet', 
+         hardcopy='wave%04d.png' % j) # Creates j plot files for each plot
+    j += 1
+
+movie('wave*.png', encoder='convert', fps=6, output_file='packetmovie.gif')
+
+
