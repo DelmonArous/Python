@@ -1,0 +1,32 @@
+class Polynomial:
+    def __init__(self, coefficients): # takes in a dictionary 
+        self.coeff = coefficients
+
+    def __add__(self, other):
+
+        sum_coeff = {}
+        
+        for k in self.coeff:
+            sum_coeff[k] = self.coeff[k] # Copies the first dictionary
+
+        # if the dictionaries have same key, we add their key-values
+        # if the dictionaries do not have the same key, we generate the missing key with its corresponding value
+        for k in other.coeff: 
+            if k in self.coeff:
+                sum_coeff[k] += other.coeff[k]
+                if sum_coeff[k] == 0:
+                    del sum_coeff[k]    # delete key if the coefficient is equal to zero
+            else:           
+                sum_coeff[k] = other.coeff[k] 
+
+        return Polynomial(sum_coeff)
+
+p1 = Polynomial({1: 1, 100: -3})
+p2 = Polynomial({20: 1, 1: -1, 100: 4})
+p3 = p1 + p2
+print p3.coeff
+
+'''
+Unix> python Polynomial_dict1.py
+{20: 1, 100: 1}
+'''

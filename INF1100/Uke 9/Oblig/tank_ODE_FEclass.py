@@ -1,0 +1,49 @@
+from scitools.std import *
+
+class ForwardEuler:
+    def __init__(self, f, dt):
+        self.f, self.dt = f, dt
+    
+    def set_initial_condition(self, u0, t0=0):
+        self.u = []
+        self.t = []
+        
+        self.u.append(float(u0))
+        self.t.append(float(t0))
+        self.k = 0
+
+    def solve(self, T):
+        tnew = 0
+        while tnew <= T:
+            unew = self.advance()
+            self.u.append(unew)
+            tnew = self.t[-1] + self.dt
+            self.t.append(tnew)
+            self.k += 1
+        return array(self.u), array(self.t)
+
+    def advance(self):
+        u, dt, f, k , t = \
+            self.u, self.dt, self.f, self.k, self.t[-1]
+        
+        unew = u[k] + dt*f(u[k], t)
+        return unew
+
+class Tank:
+    def __init__(self, r, R, g, h0):
+        self.r, self.R, self.g, self.h0 = r, R, g, h0
+    
+    def __call__(self, h, t):
+        self.r, self.R, self.g = r, R, g
+        return -((r/R)**2)*((1+(r/R)**4)**(-1./2))*sqrt(2*g*h)
+
+r = 1./100; R = 20./100; g = 9.81; h0 = 1. # Initial conditions 
+problem = Tank(r, R, g, h0) # the ODE with its initial conditions
+
+dt = 10; T = 200
+method = ForwardEuler(problem, dt)  # implementing the ODE into the ForwardEuler class
+method.set_initial_condition(problem.h0, 0)
+h, t = method.solve(T)              # computing the two arrays h and t using Euler's method
+plot(t, h, axis=[0, T, float(min(h)), float(max(h))], 
+     xlabel='t (s)', ylabel='h(t) (m)', legend='Approx. of h(t)',
+     title='Solution of an ODE for emptying a tank')

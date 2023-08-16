@@ -1,0 +1,5 @@
+from numpy import *
+import sys
+
+r = random([10**i for i in [1, 2, 3, 6])
+print r 

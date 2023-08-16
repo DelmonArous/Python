@@ -1,0 +1,28 @@
+from math import *
+
+class Diff:
+    def __init__(self, f, h = 1E-9):
+        self.f, self.h = f, float(h)
+
+class Backward1(Diff):
+    def __call__(self, x):
+        f, h = self.f, self.h
+        return (f(x)-f(x-h))/float(h)
+
+class Backward2(Diff):
+    def __call__(self, x):
+        f, h = self.f, self.h
+        return (f(x-2*h) - 4*f(x-h) + 3*f(x))/float(2*h)
+
+h_values = [2**(-k) for k in range(0,15)];
+t = x = 0
+def g(t): return exp(-t)
+def dg(t): return -exp(-t)
+
+for h in h_values:
+    approx1 = Backward1(g, h)
+    approx2 = Backward2(g, h)
+    print 'h = %g: Backward1: %g, Backward2: %g' % (h, approx1(x), approx2(x))
+    print 'Error in derivative with Backward1 method is', (abs(dg(t) - approx1(x)))
+    print 'Error in derivative with Backward2 method is', (abs(dg(t) - approx2(x)))
+    print '------------'

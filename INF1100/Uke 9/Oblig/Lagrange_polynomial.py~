@@ -1,0 +1,85 @@
+from scitools.std import *
+
+class Lagrange:
+    def __init__(self, p):  # takes in p = [[x0,y0],[x1,y1],...,[xn,yn]]  
+        self.p = p
+        self.xlist = zeros(len(self.p))
+        self.ylist = zeros(len(self.p))
+        # Split the x-values and y-values into seperate arrays
+        for k in range(len(self.p)):
+            self.xlist[k] = self.p[k][0]
+            self.ylist[k] = self.p[k][1]
+
+    def __call__(self, x):
+        p = self.p
+        xlist = self.xlist; ylist = self.ylist 
+        pL = 0.0
+        for k in range(len(p)):     # k = 0,1,2,...,n where n = len(p)
+            Lk = 1
+            for i in range(len(p)): # i = 0,1,2,...,n
+                if i != k:          # want this statement to avoid multiplying with zero (denominator)
+                    Lk *= (x - xlist[i])/float((xlist[k]-xlist[i])) # L_k(x) computed
+            
+            pL += ylist[k]*Lk       # p_L(x) computed
+
+        return pL
+        
+    def _verify(self):
+        p = self.p
+        xlist = self.xlist; ylist = self.ylist
+        eps = 1E-14             # error bound
+        counter = 0.0
+        for k in range(len(p)): # k = 0,1,2,...,n
+           verify = abs(self.__call__(xlist[k]) - ylist[k]) # the error between
+           if verify <= eps:                                # the exact y-value and the computed y-value
+               counter += 1
+               print '%g %% of all computed y-values have an error below %g ' % \
+                   ((counter/len(p))*100, eps)
+
+def test():
+    '''This function calls to the method _verify and 
+       checks the error using the curve sin(x) for comparison
+       for 5 values of x between [0, pi]'''
+    x_values_test = linspace(0, pi, 5)
+    test_list = []
+    
+    for x in x_values_test:
+        test_list.append([x, sin(x)])
+    
+    test = Lagrange(test_list)
+    test._verify()
+
+test()
+
+def f(x):
+    return abs(x)
+
+n_values = [3, 5, 7, 11, 13, 20] # the n points we want
+x2_values = linspace(-2, 2, 1000)
+
+for n in n_values:
+    x1_values = linspace(-2, 2, n+1)      # generates n+1 points between [-2,2]
+    data = [[x, f(x)] for x in x1_values] # generates n+1 points in a nested list
+    y_approx = Lagrange(data)
+    y1_values = y_approx(x1_values)       # computes n+1 approx. y-values by interpolation
+    y2_values = y_approx(x2_values)       # computes the function values between the the points
+    
+    figure()
+    plot(x2_values, f(x2_values),    
+     axis=[-2, 2, min(f(x2_values)), max(f(x2_values))],
+     legend='Exact', title='Interpolation of n+1 points') # plot of the exact curve
+
+    hold('on')
+
+    plot(x1_values, y1_values, 'o' , x2_values, y2_values,
+         xlabel='x', ylabel='y', legend=('%d points' % (n+1)))
+    figure()
+
+'''
+Unix> python Lagrange_polynomial.py
+20 % of all computed y-values have an error below 1e-14 
+40 % of all computed y-values have an error below 1e-14 
+60 % of all computed y-values have an error below 1e-14 
+80 % of all computed y-values have an error below 1e-14 
+100 % of all computed y-values have an error below 1e-14 
+'''

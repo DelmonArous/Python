@@ -1,0 +1,54 @@
+from scitools.std import *
+
+try:
+    formula = sys.argv[1]
+    u0 = float(sys.argv[2])
+    dt = float(sys.argv[3])
+    T = float(sys.argv[4])
+except IndexError:
+    print 'You failed to provide cml arguments!'
+    sys.exit(1)
+
+class ODESolver:
+    def __init__(self, f, dt):
+        self.f = f
+        self.dt = dt
+
+    def advance(self):
+        raise NotImplementedError
+
+    def set_initial_condition(self, u0, t0=0):
+        self.u = []    
+        self.t = []    
+        
+        self.u.append(float(u0))
+        self.t.append(float(t0))
+        self.k = 0  
+
+    def solve(self, T):
+        self.k = 0
+        tnew = 0
+        while tnew <= T:
+            unew = self.advance()
+            self.u.append(unew)
+            tnew = self.t[-1] + self.dt
+            self.t.append(tnew)
+            self.k += 1
+        return array(self.u), array(self.t)
+    
+class ForwardEuler(ODESolver):
+    def advance(self):
+        u, dt, f, k, t = \
+           self.u, self.dt, self.f, self.k, self.t[-1]
+
+        unew = u[k] + dt*f(u[k], t)
+        return unew
+
+f = StringFunction(formula, independent_variables=('u','t'))
+
+method = ForwardEuler(f, dt)
+method.set_initial_conditions(u0)
+u, t = method.solve(T)
+print method.__name__, ':\n', u
+plot(t, u, legend=('%s' % formula), 
+     title=('Solved the ODE problem using %s method' % method.__name__)) 

@@ -1,0 +1,22 @@
+import random, sys
+
+N = int(sys.argv[1])
+d = {}
+
+for k in range (2,13):
+    d[k] = 0
+
+for i in range(N):
+
+    s = 0
+    for j in range(3):
+        r = random.randint(1, 6)
+        s += r
+    
+    for k in range(2, 13):
+        if k == s:
+            d[k] += 1
+
+for i in range(2, 13):
+    print 'sum = %d, probability: %g %%' % (i, (d[i]/float(N))*100)
+
